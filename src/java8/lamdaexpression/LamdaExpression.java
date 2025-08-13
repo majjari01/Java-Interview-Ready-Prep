@@ -4,16 +4,16 @@ package java8.lamdaexpression;
 @FunctionalInterface
 public interface LamdaExpression {
     //In a functional interface, e can only have ine and only one abstract method.
-    public void abstractMethod(String input);
+    void abstractMethod(String input);
 
     //but can have any number of default or static methods
-//    default void defaultMethod(String input){
-//        System.out.println(input);
-//    }
+    default void defaultMethod(String input){
+        System.out.println(input);
+    }
 
-//    public static void staticMethd(){
-//        System.out.println("This ia a static method");
-//    }
+   static void staticMethd(){
+        System.out.println("This ia a static method");
+    }
 
 
 

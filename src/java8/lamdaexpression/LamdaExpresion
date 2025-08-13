@@ -79,7 +79,33 @@ Hello from method reference
 ```
 
 ---
+================================================================================
+A lambda expression in Java can only implement the single abstract method (SAM) of a functional interface.
+It cannot directly implement or override a default or static method of an interface.
 
-If you want, I can also show you **how to skip the implementing class entirely** and use **only a lambda** to run this functional interface — that’s often a follow-up question in interviews.
+1️⃣ Why you can’t pass default/static methods “through” a lambda
+Default methods already have a body — so they are not abstract and don’t need implementing.
 
-Do you want me to show that version too?
+Static methods belong to the interface itself, not an instance, so they’re called directly on the interface, not through a lambda.
+
+A lambda only exists to provide the missing implementation for an abstract method in a functional interface.
+================================================================================
+
+################################################################
+Static methods are utility-like -> their behavior should not depend on the instance or class hierarchy.
+################################################################
+ Interview Notes
+Abstract = “must be implemented.”
+
+Default = “already implemented, but can be overridden.”
+
+Static = “already implemented, belongs to interface, not inheritable.”
+
+Static in Interface ≠ Static in Class —
+In a class, a static method is inherited, but in an interface it’s not.------------->important point to be noted
+#################################################################
+| **Type of Method** | **Has Body?** | **Can Be Overridden?**                               | **Inherited by Implementing Class?** | **Access**            | **Call Syntax**          | **Java Version Introduced** |
+| ------------------ | ------------- | ---------------------------------------------------- | ------------------------------------ | --------------------- | ------------------------ | --------------------------- |
+| **Abstract**       | ❌ No          | ✅ Yes (must be implemented unless class is abstract) | ✅ Yes                                | `public` (implicitly) | `obj.method()`           | Since Java 1.0              |
+| **Default**        | ✅ Yes         | ✅ Yes (optional)                                     | ✅ Yes                                | `public` (implicitly) | `obj.method()`           | Java 8                      |
+| **Static**         | ✅ Yes         | ❌ No                                                 | ❌ No                                 | `public` (implicitly) | `InterfaceName.method()` | Java 8                      |

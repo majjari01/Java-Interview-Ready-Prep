@@ -25,6 +25,10 @@ public class LamdaExpresionImpl implements LamdaExpression{
         // 3️⃣ Method reference implementation
         LamdaExpression method1 = System.out::println;
         method1.abstractMethod("Hello from method reference");
+
+        LamdaExpression.staticMethd();
+        obj.defaultMethod("This is default method in funvtional interface");
+
     }
 }
 
