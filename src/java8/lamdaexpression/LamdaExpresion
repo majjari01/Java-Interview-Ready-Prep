@@ -1,0 +1,85 @@
+I see what you’re trying to do here — you want to show **two ways** of implementing a functional interface method:
+
+1. **Traditional way** (via `implements`)
+2. **Java 8 Lambda way**
+
+But your code won’t compile as it stands because:
+
+* You’re calling `abstractMethod();` in `main()` without passing parameters, but if your functional interface has a method like
+
+  ```java
+  void abstractMethod(String input);
+  ```
+
+  you must call it with a string.
+* The `LamdaExpression` interface definition is missing from your snippet, so we need to create it.
+* The lambda implementations (`method` and `method1`) are defined, but not executed (`method.abstractMethod(...)` is missing).
+
+---
+
+Here’s a **fixed, working version**:
+
+```java
+@FunctionalInterface
+interface LamdaExpression {
+    void abstractMethod(String input);
+}
+
+public class LamdaExpresionImpl implements LamdaExpression {
+
+    // Traditional way
+    @Override
+    public void abstractMethod(String input) {
+        System.out.println("Traditional way: " + input);
+    }
+
+    public static void main(String[] args) {
+        // 1️⃣ Traditional approach using class implementation
+        LamdaExpresionImpl obj = new LamdaExpresionImpl();
+        obj.abstractMethod("Hello from traditional implementation");
+
+        // 2️⃣ Lambda expression implementation
+        LamdaExpression method = (input) -> {
+            System.out.println("Lambda way: " + input);
+        };
+        method.abstractMethod("Hello from lambda");
+
+        // 3️⃣ Method reference implementation
+        LamdaExpression method1 = System.out::println;
+        method1.abstractMethod("Hello from method reference");
+    }
+}
+```
+
+---
+
+### **How This Works**
+
+1. **Functional Interface**
+
+   * `@FunctionalInterface` ensures only one abstract method exists.
+2. **Traditional Implementation**
+
+   * The class `LamdaExpresionImpl` overrides `abstractMethod`.
+3. **Lambda Implementation**
+
+   * `(input) -> { ... }` is a shorter way to implement the method inline.
+4. **Method Reference**
+
+   * `System.out::println` automatically matches `void abstractMethod(String)`.
+
+---
+
+### **Output**
+
+```
+Traditional way: Hello from traditional implementation
+Lambda way: Hello from lambda
+Hello from method reference
+```
+
+---
+
+If you want, I can also show you **how to skip the implementing class entirely** and use **only a lambda** to run this functional interface — that’s often a follow-up question in interviews.
+
+Do you want me to show that version too?
