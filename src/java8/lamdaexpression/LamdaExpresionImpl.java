@@ -28,6 +28,9 @@ public class LamdaExpresionImpl implements LamdaExpression{
 
         LamdaExpression.staticMethd();
         obj.defaultMethod("This is default method in funvtional interface");
+        //the below can not be done because only one abstract method is implemented. If it has more than one abstract method then it will not be consider as functional interface. Since functional interface must have only one abstract method.
+//        LamdaExpression val = obj.defaultMethod((String input)->System.out.println("this is a overriden default method using lamnda dunction in a function interfcae"));
+//        obj.defaultMethod(val);
 
     }
 }
