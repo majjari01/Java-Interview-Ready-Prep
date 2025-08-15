@@ -1,0 +1,386 @@
+Alright — let’s make a **single, cohesive program** that demonstrates **all the important Java 8 features** you should know for interviews.
+I’ll keep it practical, with short, clear examples and comments, so you can revise quickly.
+
+---
+
+## **Java 8 Features Covered**
+
+1. **Lambda Expressions**
+2. **Functional Interfaces** (`@FunctionalInterface`)
+3. **Default Methods in Interfaces**
+4. **Static Methods in Interfaces**
+5. **Method References** (`::`)
+6. **Streams API** (filter, map, reduce, collect)
+7. **Optional Class**
+8. **Date and Time API** (`java.time`)
+
+---
+
+### **Full Program**
+
+```java
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void greet(String name);
+
+    // Default method
+    default void defaultMethod() {
+        System.out.println("Default method in interface");
+    }
+
+    // Static method
+    static void staticMethod() {
+        System.out.println("Static method in interface");
+    }
+}
+
+public class Java8FeaturesDemo {
+    public static void main(String[] args) {
+
+        // 1️⃣ Lambda Expressions
+        MyFunctionalInterface lambda = name -> System.out.println("Hello, " + name);
+        lambda.greet("Maheshwari");
+
+        // 2️⃣ Default and Static Methods in Interfaces
+        lambda.defaultMethod();
+        MyFunctionalInterface.staticMethod();
+
+        // 3️⃣ Method Reference
+        MyFunctionalInterface methodRef = System.out::println;
+        methodRef.greet("Hi from Method Reference");
+
+        // 4️⃣ Streams API
+        List<String> names = Arrays.asList("John", "Jane", "Jack", "Jill", "Maheshwari");
+        List<String> filteredNames = names.stream()
+                .filter(n -> n.startsWith("J"))
+                .map(String::toUpperCase)
+                .collect(Collectors.toList());
+        System.out.println("Filtered Names: " + filteredNames);
+
+        // 5️⃣ Predicate with Streams
+        Predicate<String> startsWithJ = n -> n.startsWith("J");
+        List<String> predicateResult = names.stream()
+                .filter(startsWithJ)
+                .collect(Collectors.toList());
+        System.out.println("Names starting with J: " + predicateResult);
+
+        // 6️⃣ Optional Class
+        Optional<String> optionalName = Optional.of("Java 8");
+        optionalName.ifPresent(val -> System.out.println("Optional contains: " + val));
+        System.out.println(optionalName.orElse("Default Value"));
+        Optional<String> emptyOptional = Optional.empty();
+        System.out.println(emptyOptional.orElse("Empty Optional Handled"));
+
+        // 7️⃣ Date and Time API
+        LocalDate today = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("Today: " + today);
+        System.out.println("Current DateTime: " + now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+
+        // 8️⃣ Reduce in Streams
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        int sum = numbers.stream().reduce(0, Integer::sum);
+        System.out.println("Sum using reduce: " + sum);
+
+        // 9️⃣ ForEach with Lambda
+        names.forEach(n -> System.out.println("Name: " + n));
+    }
+}
+```
+
+---
+
+### **Output Example**
+
+```
+Hello, Maheshwari
+Default method in interface
+Static method in interface
+Hi from Method Reference
+Filtered Names: [JOHN, JANE, JACK, JILL]
+Names starting with J: [John, Jane, Jack, Jill]
+Optional contains: Java 8
+Java 8
+Empty Optional Handled
+Today: 2025-08-13
+Current DateTime: 13-08-2025 20:15:32
+Sum using reduce: 15
+Name: John
+Name: Jane
+Name: Jack
+Name: Jill
+Name: Maheshwari
+```
+
+---
+
+✅ **Why this program is gold for interviews:**
+
+* Covers **every core Java 8 feature** in one file.
+* Shows **syntax + purpose** clearly.
+* Uses **realistic examples** (lists, predicates, Optionals, date handling).
+
+---
+
+Perfect — here’s your **Java 8 Interview Cheat Sheet**.
+It’s short enough for **quick revision** but still has **examples** so you remember the syntax in the interview.
+
+---
+
+## **Java 8 Cheat Sheet – Interview Quick Reference**
+
+| Feature                             | One-line Purpose                                                              | Syntax Example                                                                 |
+| ----------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **Lambda Expressions**              | Write short, anonymous function implementations.                              | `(a, b) -> a + b`                                                              |
+| **Functional Interface**            | Interface with **one** abstract method (can have default & static methods).   | `@FunctionalInterface interface MyFunc { void run(); }`                        |
+| **Default Methods**                 | Add method implementations to interfaces without breaking existing code.      | `default void show() { System.out.println("Default"); }`                       |
+| **Static Methods in Interface**     | Utility/helper methods directly in interfaces.                                | `static void help() { System.out.println("Help"); }`                           |
+| **Method References**               | Shorter syntax for calling existing methods.                                  | `names.forEach(System.out::println);`                                          |
+| **Streams API**                     | Functional-style operations on collections.                                   | `list.stream().filter(x -> x > 5).map(x -> x*2).collect(Collectors.toList());` |
+| **Predicate / Consumer / Function** | Built-in functional interfaces for conditions, consuming values, and mapping. | `Predicate<String> p = s -> s.startsWith("A");`                                |
+| **Optional Class**                  | Avoid `null` checks and NullPointerExceptions.                                | `Optional.ofNullable(val).orElse("Default");`                                  |
+| **Date/Time API**                   | Immutable, thread-safe date handling.                                         | `LocalDate.now()`, `LocalDateTime.now()`                                       |
+| **Collectors**                      | Terminal operation to collect stream results into list/set/map.               | `collect(Collectors.toList())`                                                 |
+| **forEach**                         | Iterate with lambda instead of loops.                                         | `list.forEach(x -> System.out.println(x));`                                    |
+| **reduce**                          | Aggregate values into a single result.                                        | `int sum = nums.stream().reduce(0, Integer::sum);`                             |
+
+---
+
+### **Mini Example with All Core Features**
+
+```java
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@FunctionalInterface
+interface Greeting {
+    void say(String msg);
+    default void defaultGreet() { System.out.println("Default Greeting"); }
+    static void staticGreet() { System.out.println("Static Greeting"); }
+}
+
+public class Java8CheatSheet {
+    public static void main(String[] args) {
+        // Lambda
+        Greeting g = m -> System.out.println("Hello " + m);
+        g.say("Maheshwari");
+
+        // Default & Static
+        g.defaultGreet();
+        Greeting.staticGreet();
+
+        // Streams + Method Reference
+        List<String> names = Arrays.asList("John", "Jane", "Jack");
+        List<String> filtered = names.stream()
+                .filter(n -> n.startsWith("J"))
+                .map(String::toUpperCase)
+                .collect(Collectors.toList());
+        filtered.forEach(System.out::println);
+
+        // Optional
+        Optional<String> opt = Optional.ofNullable("Java 8");
+        System.out.println(opt.orElse("Default"));
+
+        // Date API
+        System.out.println("Today: " + LocalDate.now());
+
+        // Reduce
+        List<Integer> nums = Arrays.asList(1, 2, 3);
+        int sum = nums.stream().reduce(0, Integer::sum);
+        System.out.println("Sum: " + sum);
+    }
+}
+```
+
+---
+
+💡 **Interview Tip**: If asked *“Which is your favorite Java 8 feature?”* — pick one (like Streams API or Optional), explain **why**, and give a quick code example from memory. That shows both understanding and confidence.
+
+---
+
+Alright — here’s your **Java 8 Flashcard Sheet** for lightning-fast interview revision.
+Each “card” has a **term** on one side and **syntax + mini example** on the other.
+
+---
+
+## **Java 8 Flashcards**
+
+---
+
+### **1️⃣ Lambda Expression**
+
+**Term:** Lambda Expression
+**Syntax & Example:**
+
+```java
+(a, b) -> a + b
+list.forEach(item -> System.out.println(item));
+```
+
+**Key Idea:** Short anonymous function, no boilerplate.
+
+---
+
+### **2️⃣ Functional Interface**
+
+**Term:** Functional Interface
+**Syntax & Example:**
+
+```java
+@FunctionalInterface
+interface MyFunc { void run(); }
+```
+
+**Key Idea:** One abstract method, can have default & static methods.
+
+---
+
+### **3️⃣ Default Method**
+
+**Term:** Default Method in Interface
+**Syntax & Example:**
+
+```java
+default void greet() { System.out.println("Hello"); }
+```
+
+**Key Idea:** Adds method body to interface without breaking old code.
+
+---
+
+### **4️⃣ Static Method in Interface**
+
+**Term:** Static Method in Interface
+**Syntax & Example:**
+
+```java
+static void help() { System.out.println("Help"); }
+```
+
+**Key Idea:** Utility methods directly in interface.
+
+---
+
+### **5️⃣ Method Reference**
+
+**Term:** Method Reference
+**Syntax & Example:**
+
+```java
+list.forEach(System.out::println);
+```
+
+**Key Idea:** Short form for calling existing methods.
+
+---
+
+### **6️⃣ Streams API**
+
+**Term:** Streams API
+**Syntax & Example:**
+
+```java
+list.stream().filter(x -> x > 5)
+    .map(x -> x*2)
+    .collect(Collectors.toList());
+```
+
+**Key Idea:** Functional-style collection processing.
+
+---
+
+### **7️⃣ Predicate / Consumer / Function**
+
+**Term:** Built-in Functional Interfaces
+**Syntax & Example:**
+
+```java
+Predicate<String> p = s -> s.startsWith("A");
+Consumer<String> c = System.out::println;
+Function<Integer, String> f = x -> "Num " + x;
+```
+
+**Key Idea:** Ready-made functional types.
+
+---
+
+### **8️⃣ Optional Class**
+
+**Term:** Optional Class
+**Syntax & Example:**
+
+```java
+Optional.ofNullable(val).orElse("Default");
+```
+
+**Key Idea:** Avoids `null` checks, prevents NPE.
+
+---
+
+### **9️⃣ Date/Time API**
+
+**Term:** Date/Time API (java.time)
+**Syntax & Example:**
+
+```java
+LocalDate.now();
+LocalDateTime.now();
+```
+
+**Key Idea:** Immutable, thread-safe date handling.
+
+---
+
+### **🔟 Collectors**
+
+**Term:** Collectors
+**Syntax & Example:**
+
+```java
+collect(Collectors.toList());
+collect(Collectors.toSet());
+```
+
+**Key Idea:** Convert streams back to collections.
+
+---
+
+### **1️⃣1️⃣ forEach**
+
+**Term:** forEach in Streams
+**Syntax & Example:**
+
+```java
+list.forEach(x -> System.out.println(x));
+```
+
+**Key Idea:** Replace traditional loops with lambda iteration.
+
+---
+
+### **1️⃣2️⃣ reduce**
+
+**Term:** Reduce
+**Syntax & Example:**
+
+```java
+nums.stream().reduce(0, Integer::sum);
+```
+
+**Key Idea:** Aggregate into single value.
+
+---
+
+If you keep these 12 flashcards in mind, you’ll cover **90% of Java 8 interview questions**.
+
+---
+
+

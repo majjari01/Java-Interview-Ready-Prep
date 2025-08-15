@@ -1,0 +1,77 @@
+The **concept of a functional interface** in Java is simple but powerful:
+
+> It’s an interface that contains **exactly one abstract method**, which represents a **single unit of behavior**.
+> This allows you to treat the interface as a *function* and implement it with a **lambda expression** or **method reference**.
+
+---
+
+## **Key Ideas**
+
+1. **Exactly one abstract method**
+
+   * Known as a **Single Abstract Method (SAM)** interface.
+   * This method defines the contract (behavior) you want to implement.
+
+2. **Other methods allowed**
+
+   * Can have **default methods** (with body) — Java 8
+   * Can have **static methods** (with body) — Java 8
+   * Can have **private methods** (with body) — Java 9+
+   * These don’t count towards the "single abstract method" rule.
+
+3. **Why it exists**
+
+   * Before Java 8, you’d write anonymous classes for small tasks — verbose and ugly.
+   * Java 8 introduced **lambdas**, but lambdas need a target type — a functional interface provides that target type.
+
+4. **@FunctionalInterface annotation**
+
+   * Optional but recommended — compiler ensures the interface follows the single abstract method rule.
+
+---
+
+## **Example**
+
+```java
+@FunctionalInterface
+interface Greeting {
+    void sayHello(String name); // single abstract method
+}
+
+public class Demo {
+    public static void main(String[] args) {
+        // Lambda expression implementing sayHello
+        Greeting greet = name -> System.out.println("Hello, " + name);
+
+        greet.sayHello("Maheshwari");
+    }
+}
+```
+
+**Output:**
+
+```
+Hello, Maheshwari
+```
+
+---
+
+## **Real-world examples from Java**
+
+Java 8 introduced many built-in functional interfaces in **`java.util.function`** package:
+
+* `Predicate<T>` → returns boolean
+* `Function<T, R>` → transforms T to R
+* `Consumer<T>` → consumes T, returns nothing
+* `Supplier<T>` → supplies T without input
+
+---
+
+💡 **Interview hook**
+If asked:
+
+> Can a functional interface have multiple methods?
+> You answer:
+> Only one abstract method. It can have any number of default, static, or private methods with implementations.
+
+---

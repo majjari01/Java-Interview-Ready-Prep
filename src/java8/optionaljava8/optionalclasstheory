@@ -1,0 +1,149 @@
+In Java 8, the **`Optional`** class is a **container object** that may or may not hold a non-null value.
+
+---
+
+## **Core Idea**
+
+Before Java 8, you’d often return `null` to indicate “no value,” which could cause **`NullPointerException`** if the caller forgot to check.
+`Optional` wraps a value so you can explicitly say:
+
+* “There’s something inside” → **`Optional.of(value)`**
+* “There’s nothing inside” → **`Optional.empty()`**
+
+This forces you to **handle the absence of a value** more safely.
+
+---
+
+## **Declaration**
+
+`Optional` is a **final class** in `java.util` package.
+
+---
+
+## **Common Ways to Create Optional**
+
+```java
+Optional<String> name = Optional.of("Maheshwari");    // value present
+Optional<String> empty = Optional.empty();            // no value
+Optional<String> nullable = Optional.ofNullable(null); // value may be null
+```
+
+---
+
+## **Key Methods**
+
+| Method                 | Purpose                                   |
+| ---------------------- | ----------------------------------------- |
+| `isPresent()`          | Returns `true` if value exists            |
+| `ifPresent(Consumer)`  | Runs code if value exists                 |
+| `get()`                | Returns value (throws exception if empty) |
+| `orElse(defaultValue)` | Returns value or default if empty         |
+| `orElseGet(Supplier)`  | Lazy default value                        |
+| `orElseThrow()`        | Throws exception if empty                 |
+| `map(Function)`        | Transforms value if present               |
+| `flatMap(Function)`    | Same as map but avoids nested Optional    |
+
+---
+
+## **Example Usage**
+
+```java
+import java.util.Optional;
+
+public class OptionalDemo {
+    public static void main(String[] args) {
+        Optional<String> name = Optional.of("Java 8");
+
+        // Using ifPresent
+        name.ifPresent(n -> System.out.println("Value: " + n));
+
+        // Using orElse
+        Optional<String> empty = Optional.empty();
+        System.out.println(empty.orElse("Default Value"));
+
+        // Avoid NullPointerException
+        Optional<String> maybeNull = Optional.ofNullable(null);
+        System.out.println(maybeNull.orElse("Safe Handling"));
+    }
+}
+```
+
+**Output:**
+
+```
+Value: Java 8
+Default Value
+Safe Handling
+```
+
+---
+
+## **Key Points for Interviews**
+
+* **Why introduced in Java 8?** → To reduce `null`-related bugs and encourage functional programming style.
+* **Is Optional serializable?** → No, not by default.
+* **Should you use Optional for fields in DTOs/entities?** → Usually **no** — it’s intended for **method return types**, not as a field type.
+* **Can Optional be null?** → Technically yes, but it defeats the purpose.
+
+---
+Here’s your **Java 8 Optional Methods Behavior Table** — showing exactly what happens for **Present** vs **Empty** Optionals.
+
+---
+
+## **Optional Method Behavior Table**
+
+| Method                | If Value is **Present**                 | If Value is **Empty**             | Notes                                                                                             |
+| --------------------- | --------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `isPresent()`         | `true`                                  | `false`                           | Simple presence check.                                                                            |
+| `ifPresent(Consumer)` | Runs the given code                     | Does nothing                      | Useful for safe, inline execution.                                                                |
+| `get()`               | Returns the value                       | Throws `NoSuchElementException`   | Dangerous if not checked first — avoid in favor of `orElse`.                                      |
+| `orElse(T other)`     | Returns the value                       | Returns `other`                   | `other` is **evaluated always**, even if not needed.                                              |
+| `orElseGet(Supplier)` | Returns the value                       | Calls `Supplier` to produce value | **Lazy evaluation** — only runs supplier if empty.                                                |
+| `orElseThrow()`       | Returns the value                       | Throws `NoSuchElementException`   | Since Java 10, can also pass a custom exception supplier: `orElseThrow(() -> new MyException())`. |
+| `map(Function)`       | Transforms and wraps result in Optional | Returns empty Optional            | Safe mapping — works only if value present.                                                       |
+| `flatMap(Function)`   | Like map, but avoids nested Optional    | Returns empty Optional            | Function must return Optional.                                                                    |
+| `filter(Predicate)`   | Returns same Optional if predicate true | Returns empty Optional            | Lets you apply conditional check inside Optional.                                                 |
+
+---
+
+### **Example of All in Action**
+
+```java
+import java.util.Optional;
+
+public class OptionalTableDemo {
+    public static void main(String[] args) {
+        Optional<String> present = Optional.of("Java");
+        Optional<String> empty = Optional.empty();
+
+        System.out.println(present.isPresent()); // true
+        System.out.println(empty.isPresent());   // false
+
+        present.ifPresent(val -> System.out.println("Hi " + val)); // Hi Java
+        empty.ifPresent(val -> System.out.println("Hi " + val));   // no output
+
+        System.out.println(present.orElse("Default")); // Java
+        System.out.println(empty.orElse("Default"));   // Default
+
+        System.out.println(present.orElseGet(() -> "Lazy")); // Java
+        System.out.println(empty.orElseGet(() -> "Lazy"));   // Lazy
+
+        System.out.println(present.map(String::toUpperCase)); // Optional[JAVA]
+        System.out.println(empty.map(String::toUpperCase));   // Optional.empty
+    }
+}
+```
+
+---
+
+💡 **Interview Tip:**
+If they ask:
+
+> What’s the difference between `orElse()` and `orElseGet()`?
+
+Answer:
+
+* `orElse()` evaluates its argument **even if the Optional has a value**.
+* `orElseGet()` evaluates the supplier **only if the Optional is empty** — better for expensive computations.
+
+---
